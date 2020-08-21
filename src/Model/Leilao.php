@@ -7,10 +7,12 @@ class Leilao {
 	private $lances;
 	/** @var string */
 	private $descricao;
+	private $finalizado;
 
 	public function __construct(string $descricao) {
 		$this->descricao = $descricao;
 		$this->lances = [];
+		$this->finalizado = false;
 	}
 
 	private function ehDoUltimoUsuario(Lance $lance): bool{
@@ -20,12 +22,13 @@ class Leilao {
 
 	public function recebeLance(Lance $lance) {
 		if (!empty($this->lances) && $this->ehDoUltimoUsuario($lance)) {
-			return;
+			throw new \DomainException('Não é possível fazer dois lances seguidos do mesmo usuário');
 		}
 
 		$totalLancesUsuario = $this->quantidadeLancesPorUsuario($lance->getUsuario());
 		if ($totalLancesUsuario >= 5) {
-			return;
+			throw new \DomainException('Não é possível fazer mais que 5 lances por usuário');
+
 		}
 
 		$this->lances[] = $lance;
@@ -37,6 +40,14 @@ class Leilao {
 	public function getLances(): array
 	{
 		return $this->lances;
+	}
+
+	public function finaliza() {
+		$this->finalizado = true;
+	}
+
+	public function estaFinalizado(): bool {
+		return $this->finalizado;
 	}
 
 	private function quantidadeLancesPorUsuario(Usuario $usuario): int{
