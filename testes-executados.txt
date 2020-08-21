@@ -1,5 +1,6 @@
 Alura\Leilao\Tests\Models\Leilao
  [x] Leilao nao deve receber lances repetidos
+ [x] Leilao não deve receber mais de 5 lances por usuario
  [x] Leilao deve receber lances with data set "Leilao com 2 lances"
  [x] Leilao deve receber lances with data set "Leilao com 1 Lance"
 
